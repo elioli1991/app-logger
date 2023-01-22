@@ -1,6 +1,9 @@
 package app_logger
 
-import "strings"
+import (
+	"github.com/elioli1991/app-infra/abstract"
+	"strings"
+)
 
 type LevelKey string
 
@@ -14,15 +17,13 @@ func (k LevelKey) String() string {
 	return string(k)
 }
 
-type Level int8
-
 const (
-	LevelInfo Level = iota
+	LevelInfo abstract.Level = iota
 	LevelError
 	LevelFatal
 )
 
-func (l Level) GetString() string {
+func GetLevelString(l abstract.Level) string {
 	switch l {
 	case LevelInfo:
 		return LevelKeyInfo.String()
@@ -35,7 +36,7 @@ func (l Level) GetString() string {
 	}
 }
 
-func ParseLevel(s string) Level {
+func ParseLevel(s string) abstract.Level {
 	switch strings.ToUpper(s) {
 	case LevelKeyInfo.String():
 		return LevelInfo

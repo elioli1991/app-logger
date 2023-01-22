@@ -1,6 +1,9 @@
 package app_logger
 
-import "testing"
+import (
+	"github.com/elioli1991/app-infra/abstract"
+	"testing"
+)
 
 func TestParseLevel(t *testing.T) {
 	type args struct {
@@ -9,7 +12,7 @@ func TestParseLevel(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want Level
+		want abstract.Level
 	}{
 		{
 			name: "info",
@@ -37,6 +40,41 @@ func TestParseLevel(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := ParseLevel(tt.args.s); got != tt.want {
 				t.Errorf("ParseLevel() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGetLevelString(t *testing.T) {
+	type args struct {
+		l abstract.Level
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		// TODO: Add test cases.
+		{
+			name: "info",
+			args: args{l: LevelInfo},
+			want: "INFO",
+		},
+		{
+			name: "info",
+			args: args{l: LevelError},
+			want: "ERROR",
+		},
+		{
+			name: "fatal",
+			args: args{l: LevelFatal},
+			want: "FATAL",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GetLevelString(tt.args.l); got != tt.want {
+				t.Errorf("GetLevelString() = %v, want %v", got, tt.want)
 			}
 		})
 	}
