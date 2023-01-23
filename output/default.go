@@ -14,15 +14,7 @@ func newDefaultOutputer() LogOutputer {
 type DefaultOutput struct{}
 
 // Format
-func (o *DefaultOutput) Format(key string, a ...interface{}) string {
-	var s string
-	s = fmt.Sprintf(" %v=%v", key, fmt.Sprint(a...))
-	return s
-}
-
-// FormatKeyvals format keyvals
-// if keyvals len % 2 > 0, loss last single element
-func (o *DefaultOutput) FormatKeyvals(keyvals ...interface{}) string {
+func (o *DefaultOutput) Format(keyvals ...interface{}) string {
 	var s string
 	if len(keyvals)%2 > 0 {
 		keyvals = keyvals[:len(keyvals)-1]

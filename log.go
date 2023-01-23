@@ -77,50 +77,137 @@ func WithOutputer(l abstract.Logger, outputer output.LogOutputer) abstract.Logge
 	}
 }
 
+// Debug print debug msg
+func (l *logger) Debug(a ...interface{}) {
+	keyvals := make([]interface{}, 0, len(l.valuer)*2+1)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		keyvals = append(keyvals, k, value)
+	}
+	keyvals = append(keyvals, DefaultMessageKey, fmt.Sprint(a...))
+	_ = l.stdLogger.Log(LevelDebug, l.outputer.Format(keyvals...))
+}
+
+// Debugf printf debug msg
+func (l *logger) Debugf(format string, a ...interface{}) {
+	keyvals := make([]interface{}, 0, len(l.valuer)*2+1)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		keyvals = append(keyvals, k, value)
+	}
+	keyvals = append(keyvals, DefaultMessageKey, fmt.Sprintf(format, a...))
+	_ = l.stdLogger.Log(LevelDebug, l.outputer.Format(keyvals...))
+}
+
+// Debugw print debug keyvals msg
+func (l *logger) Debugw(keyvals ...interface{}) {
+	newKeyvals := make([]interface{}, 0, len(keyvals)+len(l.valuer)*2)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		newKeyvals = append(newKeyvals, k, value)
+	}
+	newKeyvals = append(newKeyvals, keyvals...)
+	_ = l.stdLogger.Log(LevelDebug, l.outputer.Format(newKeyvals...))
+}
+
 // Info print info msg
 func (l *logger) Info(a ...interface{}) {
-	_ = l.stdLogger.Log(LevelInfo, l.outputer.Format(DefaultMessageKey, a...))
+	keyvals := make([]interface{}, 0, len(l.valuer)*2+1)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		keyvals = append(keyvals, k, value)
+	}
+	keyvals = append(keyvals, DefaultMessageKey, fmt.Sprint(a...))
+	_ = l.stdLogger.Log(LevelInfo, l.outputer.Format(keyvals...))
 }
 
 // Infof printf info msg
 func (l *logger) Infof(format string, a ...interface{}) {
-	_ = l.stdLogger.Log(LevelInfo, l.outputer.Format(DefaultMessageKey, fmt.Sprintf(format, a...)))
+	keyvals := make([]interface{}, 0, len(l.valuer)*2+1)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		keyvals = append(keyvals, k, value)
+	}
+	keyvals = append(keyvals, DefaultMessageKey, fmt.Sprintf(format, a...))
+	_ = l.stdLogger.Log(LevelInfo, l.outputer.Format(keyvals...))
 }
 
 // Infow print info keyvals msg
 func (l *logger) Infow(keyvals ...interface{}) {
-	_ = l.stdLogger.Log(LevelInfo, l.outputer.FormatKeyvals(keyvals...))
+	newKeyvals := make([]interface{}, 0, len(keyvals)+len(l.valuer)*2)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		newKeyvals = append(newKeyvals, k, value)
+	}
+	newKeyvals = append(newKeyvals, keyvals...)
+	_ = l.stdLogger.Log(LevelInfo, l.outputer.Format(newKeyvals...))
 }
 
 // Error print error msg
 func (l *logger) Error(a ...interface{}) {
-	_ = l.stdLogger.Log(LevelError, l.outputer.Format(DefaultMessageKey, a...))
+	keyvals := make([]interface{}, 0, len(l.valuer)*2+1)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		keyvals = append(keyvals, k, value)
+	}
+	keyvals = append(keyvals, DefaultMessageKey, fmt.Sprint(a...))
+	_ = l.stdLogger.Log(LevelError, l.outputer.Format(keyvals))
 }
 
 // Errorf printf error msg
 func (l *logger) Errorf(format string, a ...interface{}) {
-	_ = l.stdLogger.Log(LevelError, l.outputer.Format(DefaultMessageKey, fmt.Sprintf(format, a...)))
+	keyvals := make([]interface{}, 0, len(l.valuer)*2+1)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		keyvals = append(keyvals, k, value)
+	}
+	keyvals = append(keyvals, DefaultMessageKey, fmt.Sprintf(format, a...))
+	_ = l.stdLogger.Log(LevelError, l.outputer.Format(keyvals))
 }
 
 // Errorw print error keyvals msg
 func (l *logger) Errorw(keyvals ...interface{}) {
-	_ = l.stdLogger.Log(LevelError, l.outputer.FormatKeyvals(keyvals...))
+	newKeyvals := make([]interface{}, 0, len(keyvals)+len(l.valuer)*2)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		newKeyvals = append(newKeyvals, k, value)
+	}
+	newKeyvals = append(newKeyvals, keyvals...)
+	_ = l.stdLogger.Log(LevelError, l.outputer.Format(newKeyvals...))
 }
 
 // Fatal print fatal msg
 func (l *logger) Fatal(a ...interface{}) {
-	_ = l.stdLogger.Log(LevelFatal, l.outputer.Format(DefaultMessageKey, a...))
+	keyvals := make([]interface{}, 0, len(l.valuer)*2+1)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		keyvals = append(keyvals, k, value)
+	}
+	keyvals = append(keyvals, DefaultMessageKey, fmt.Sprint(a...))
+	_ = l.stdLogger.Log(LevelFatal, l.outputer.Format(keyvals...))
 	os.Exit(1)
 }
 
 // Fatalf printf fatal msg
 func (l *logger) Fatalf(format string, a ...interface{}) {
-	_ = l.stdLogger.Log(LevelFatal, l.outputer.Format(DefaultMessageKey, fmt.Sprintf(format, a...)))
+	keyvals := make([]interface{}, 0, len(l.valuer)*2+1)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		keyvals = append(keyvals, k, value)
+	}
+	keyvals = append(keyvals, DefaultMessageKey, fmt.Sprintf(format, a...))
+	_ = l.stdLogger.Log(LevelFatal, l.outputer.Format(keyvals...))
 	os.Exit(1)
 }
 
 // Fatalw print fatal keyvals msg
-func (l *logger) Fatalw(a ...interface{}) {
-	_ = l.stdLogger.Log(LevelFatal, l.outputer.FormatKeyvals(a...))
+func (l *logger) Fatalw(keyvals ...interface{}) {
+	newKeyvals := make([]interface{}, 0, len(keyvals)+len(l.valuer)*2)
+	for _, v := range l.valuer {
+		k, value := v(l.ctx)
+		newKeyvals = append(newKeyvals, k, value)
+	}
+	newKeyvals = append(newKeyvals, keyvals...)
+	_ = l.stdLogger.Log(LevelFatal, l.outputer.Format(newKeyvals...))
 	os.Exit(1)
 }
