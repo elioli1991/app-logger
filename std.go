@@ -1,12 +1,13 @@
-package app_logger
+package logger
 
 import (
 	"bytes"
 	"fmt"
-	"github.com/elioli1991/app-infra/abstract"
 	"io"
 	"log"
 	"sync"
+
+	"github.com/elioli1991/app-infra/abstract"
 )
 
 var _ abstract.StdLogger = (*stdLogger)(nil)

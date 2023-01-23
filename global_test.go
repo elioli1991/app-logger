@@ -1,4 +1,4 @@
-package app_logger
+package logger
 
 import (
 	"testing"

@@ -6,19 +6,21 @@ import (
 
 var _ LogOutputer = (*DefaultOutput)(nil)
 
-func NewDefaultOutputer() LogOutputer {
+func newDefaultOutputer() LogOutputer {
 	return &DefaultOutput{}
 }
 
-type DefaultOutput struct {
-}
+// DefaultOutput default output format
+type DefaultOutput struct{}
 
-func (o *DefaultOutput) Format(a ...interface{}) string {
+// Format
+func (o *DefaultOutput) Format(key string, a ...interface{}) string {
 	var s string
-	s = fmt.Sprint(a...)
+	s = fmt.Sprintf(" %v=%v", key, a)
 	return s
 }
 
+// Formatf
 func (o *DefaultOutput) Formatf(format string, a ...interface{}) string {
 	var s string
 	s = fmt.Sprintf(format, a...)
@@ -26,11 +28,14 @@ func (o *DefaultOutput) Formatf(format string, a ...interface{}) string {
 }
 
 // FormatKeyvals format keyvals
-// if keyval len % 2 > 0, loss last single element
+// if keyvals len % 2 > 0, loss last single element
 func (o *DefaultOutput) FormatKeyvals(keyvals ...interface{}) string {
 	var s string
-	for i := 1; i < len(keyvals)-1; i += 2 {
-		s += fmt.Sprintf(" %v=%v", keyvals[i-1], keyvals[i])
+	if len(keyvals)%2 > 0 {
+		keyvals = keyvals[:len(keyvals)-1]
+	}
+	for i := 0; i < len(keyvals)-1; i += 2 {
+		s += fmt.Sprintf(" %v=%v", keyvals[i], keyvals[i+1])
 	}
 	return s
 }

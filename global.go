@@ -1,8 +1,9 @@
-package app_logger
+package logger
 
 import (
-	"github.com/elioli1991/app-infra/abstract"
 	"sync"
+
+	"github.com/elioli1991/app-infra/abstract"
 )
 
 var global = &loggerContainer{}

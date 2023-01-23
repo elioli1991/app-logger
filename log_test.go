@@ -1,13 +1,14 @@
-package app_logger
+package logger
 
 import (
-	"github.com/elioli1991/app-infra/abstract"
 	"reflect"
 	"testing"
+
+	"github.com/elioli1991/app-infra/abstract"
 )
 
 func TestNewLogger(t *testing.T) {
-	var tests = []struct {
+	tests := []struct {
 		name string
 		want abstract.Logger
 	}{

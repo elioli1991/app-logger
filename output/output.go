@@ -3,7 +3,7 @@ package output
 var DefaultOutputer = NewLogOutputer(Default)
 
 type LogOutputer interface {
-	Format(a ...interface{}) string
+	Format(key string, a ...interface{}) string
 	Formatf(format string, a ...interface{}) string
 	FormatKeyvals(keyvals ...interface{}) string
 }
@@ -11,7 +11,7 @@ type LogOutputer interface {
 func NewLogOutputer(kind Kind) LogOutputer {
 	switch kind {
 	case Default:
-		return NewDefaultOutputer()
+		return newDefaultOutputer()
 	}
 	return nil
 }
