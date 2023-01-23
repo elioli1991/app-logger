@@ -16,14 +16,7 @@ type DefaultOutput struct{}
 // Format
 func (o *DefaultOutput) Format(key string, a ...interface{}) string {
 	var s string
-	s = fmt.Sprintf(" %v=%v", key, a)
-	return s
-}
-
-// Formatf
-func (o *DefaultOutput) Formatf(format string, a ...interface{}) string {
-	var s string
-	s = fmt.Sprintf(format, a...)
+	s = fmt.Sprintf(" %v=%v", key, fmt.Sprint(a...))
 	return s
 }
 

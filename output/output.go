@@ -4,7 +4,6 @@ var DefaultOutputer = NewLogOutputer(Default)
 
 type LogOutputer interface {
 	Format(key string, a ...interface{}) string
-	Formatf(format string, a ...interface{}) string
 	FormatKeyvals(keyvals ...interface{}) string
 }
 

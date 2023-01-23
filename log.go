@@ -2,6 +2,7 @@ package logger
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -48,6 +49,34 @@ func WithValuer(l abstract.Logger, valuer ...Valuer) abstract.Logger {
 	}
 }
 
+func WithStdLogger(l abstract.Logger, std abstract.StdLogger) abstract.Logger {
+	c, ok := l.(*logger)
+	if !ok {
+		return l
+	}
+	return &logger{
+		ctx:       c.ctx,
+		Logger:    c.Logger,
+		stdLogger: std,
+		valuer:    c.valuer,
+		outputer:  c.outputer,
+	}
+}
+
+func WithOutputer(l abstract.Logger, outputer output.LogOutputer) abstract.Logger {
+	c, ok := l.(*logger)
+	if !ok {
+		return l
+	}
+	return &logger{
+		ctx:       c.ctx,
+		Logger:    c.Logger,
+		stdLogger: c.stdLogger,
+		valuer:    c.valuer,
+		outputer:  outputer,
+	}
+}
+
 // Info print info msg
 func (l *logger) Info(a ...interface{}) {
 	_ = l.stdLogger.Log(LevelInfo, l.outputer.Format(DefaultMessageKey, a...))
@@ -55,7 +84,7 @@ func (l *logger) Info(a ...interface{}) {
 
 // Infof printf info msg
 func (l *logger) Infof(format string, a ...interface{}) {
-	_ = l.stdLogger.Log(LevelInfo, l.outputer.Formatf(format, a...))
+	_ = l.stdLogger.Log(LevelInfo, l.outputer.Format(DefaultMessageKey, fmt.Sprintf(format, a...)))
 }
 
 // Infow print info keyvals msg
@@ -70,7 +99,7 @@ func (l *logger) Error(a ...interface{}) {
 
 // Errorf printf error msg
 func (l *logger) Errorf(format string, a ...interface{}) {
-	_ = l.stdLogger.Log(LevelError, l.outputer.Formatf(format, a...))
+	_ = l.stdLogger.Log(LevelError, l.outputer.Format(DefaultMessageKey, fmt.Sprintf(format, a...)))
 }
 
 // Errorw print error keyvals msg
@@ -86,7 +115,7 @@ func (l *logger) Fatal(a ...interface{}) {
 
 // Fatalf printf fatal msg
 func (l *logger) Fatalf(format string, a ...interface{}) {
-	_ = l.stdLogger.Log(LevelFatal, l.outputer.Formatf(format, a...))
+	_ = l.stdLogger.Log(LevelFatal, l.outputer.Format(DefaultMessageKey, fmt.Sprintf(format, a...)))
 	os.Exit(1)
 }
 
